@@ -1,41 +1,69 @@
+import axios from 'axios';
 import { ApiError } from '../helper/ApiError';
+import * as userService from './userService';
+import type { AuthResponse } from '../models/UserResponse';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
-export async function login(identifier: string, password: string) {
-  const res = await fetch(`${API_BASE}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ identifier, password }),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Erreur de connexion');
-  localStorage.setItem('jwt_token', data.token);
-  return data;
-}
+export async function login(
+  identifier: string,
+  password: string
+): Promise<AuthResponse> {
+  try {
+    const response = await axios.post<AuthResponse>(`${API_BASE}/auth/login`, {
+      identifier,
+      password,
+    });
 
-export async function register(login: string, email: string, password: string) {
-  const response = await fetch(`${API_BASE}/auth/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ login, email, password }),
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    throw new ApiError(data.message || 'Erreur', {
-      status: response.status,
-      data,
+    localStorage.setItem('jwt_token', response.data.token);
+    return response.data;
+  } catch (error: any) {
+    const msg = error.response?.data?.message || 'Erreur de connexion';
+    throw new ApiError(msg, {
+      status: error.response?.status,
+      data: error.response?.data,
     });
   }
-  localStorage.setItem('jwt_token', data.token);
-  return data;
 }
 
-export function isAuthenticated() {
+export async function register(
+  login: string,
+  email: string,
+  password: string
+): Promise<AuthResponse> {
+  try {
+    const response = await axios.post<AuthResponse>(
+      `${API_BASE}/auth/register`,
+      {
+        login,
+        email,
+        password,
+      }
+    );
+
+    localStorage.setItem('jwt_token', response.data.token);
+    return response.data;
+  } catch (error: any) {
+    const msg = error.response?.data?.message || 'Erreur lors de l’inscription';
+    throw new ApiError(msg, {
+      status: error.response?.status,
+      data: error.response?.data,
+    });
+  }
+}
+
+export async function checkAuthStatus(): Promise<boolean> {
   const token = localStorage.getItem('jwt_token');
-  return !!token;
+  if (!token) return false;
+
+  try {
+    await userService.getCurrentUser();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function logout() {
-  localStorage.removeItem('auth_token');
+  localStorage.removeItem('jwt_token');
 }
