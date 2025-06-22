@@ -1,12 +1,10 @@
 <template>
-    <div class="flex flex-col min-h-screen bg-gray-50">
-        <Header />
-
-        <main class="flex-grow px-4 py-10 sm:px-6 md:px-12 bg-gray-50 flex items-center justify-center">
+    <AppLayout>
+        <main class="mt-15 flex-grow px-4 py-10 sm:px-6 md:px-12 bg-gray-50 flex items-center justify-center">
             <div
                 class="w-full max-w-7xl p-8 bg-white rounded-2xl shadow-lg space-y-10 sm:p-10 sm:rounded-3xl sm:shadow-xl relative">
 
-                <div class="absolute top-4 right-6 z-50">
+                <div class="absolute top-4 right-6 z-auto">
                     <button @click="logout"
                         class="text-white text-lg bg-red-500 p-2 rounded-full hover:bg-red-600 transition relative group"
                         aria-label="Se déconnecter">
@@ -88,7 +86,8 @@
                                 <font-awesome-icon :icon="['fas', showConfirmPassword ? 'eye-slash' : 'eye']" />
                             </button>
                         </div>
-                        <p v-for="(msg, i) in passwordErrors" :key="i" class="text-red-500 text-sm mt-1">{{ msg }}</p>
+                        <p v-for="(msg, i) in passwordErrors" :key="i" class="text-red-500 text-sm mt-1">{{ msg }}
+                        </p>
                         <button type="submit" class="w-full bg-green-400 text-white font-semibold py-3 rounded-xl
          shadow-md hover:bg-green-500 active:scale-95 transition-transform duration-150
          lg:py-2 lg:text-sm cursor-pointer">
@@ -121,18 +120,18 @@
                 message="Es-tu sûr de vouloir supprimer ton compte ? Cette action est irréversible."
                 @cancel="showConfirmModal = false" @confirm="handleDeleteConfirmed" />
         </main>
-    </div>
+    </AppLayout>
 </template>
 
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import Header from '../components/layout/HeaderMobile.vue'
 import SuccessModal from '../components/SuccessModal.vue'
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue'
 import router from '../router'
 import * as authService from '../services/authService'
 import * as userService from '../services/userService'
+import AppLayout from '../components/layout/AppLayout.vue'
 
 
 

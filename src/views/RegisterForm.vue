@@ -1,7 +1,6 @@
 <template>
-    <div class="flex flex-col min-h-screen bg-gray-50">
-        <Header />
-        <main class="flex-grow flex items-center justify-center px-4">
+    <AppLayout>
+        <main class="mt-5 h-[calc(100vh)] bg-gray-50 flex items-center justify-center px-4">
             <form @submit.prevent="handleRegister" class="max-w-md w-full p-6 bg-white rounded-lg shadow-md space-y-6"
                 novalidate>
                 <h2 class="text-2xl font-semibold text-center text-gray-800">Créer un compte</h2>
@@ -54,7 +53,7 @@
                 <p v-if="error" class="text-red-500 text-sm text-center">{{ error }}</p>
             </form>
         </main>
-    </div>
+    </AppLayout>
 </template>
 
 <script setup>
@@ -63,6 +62,7 @@ import Header from '../components/layout/HeaderMobile.vue';
 import * as authService from '../services/authService.ts';
 import { isValidEmail, isValidPassword } from '../helper/FunctionUtils.ts';
 import router from '../router/index.ts';
+import AppLayout from '../components/layout/AppLayout.vue';
 
 const login = ref('');
 const email = ref('');
