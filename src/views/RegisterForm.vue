@@ -1,7 +1,6 @@
 <template>
     <div class="flex flex-col min-h-screen bg-gray-50">
         <Header />
-
         <main class="flex-grow flex items-center justify-center px-4">
             <form @submit.prevent="handleRegister" class="max-w-md w-full p-6 bg-white rounded-lg shadow-md space-y-6"
                 novalidate>
@@ -19,15 +18,24 @@
                     <p v-for="(msg, i) in emailErrors" :key="i" class="text-red-500 text-sm mt-1">{{ msg }}</p>
                 </div>
 
-                <div>
-                    <input v-model="password" type="password" placeholder="Mot de passe"
+                <div class="relative">
+                    <input :type="showPassword ? 'text' : 'password'" v-model="password" placeholder="Mot de passe"
                         :class="inputClass(passwordErrors)" autocomplete="new-password" />
+                    <button type="button" @click="showPassword = !showPassword"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                        <font-awesome-icon :icon="['fas', showPassword ? 'eye-slash' : 'eye']" />
+                    </button>
                     <p v-for="(msg, i) in passwordErrors" :key="i" class="text-red-500 text-sm mt-1">{{ msg }}</p>
                 </div>
 
-                <div>
-                    <input v-model="confirmPassword" type="password" placeholder="Confirmer le mot de passe"
-                        :class="inputClass(confirmErrors)" autocomplete="new-password" />
+                <div class="relative">
+                    <input :type="showConfirmPassword ? 'text' : 'password'" v-model="confirmPassword"
+                        placeholder="Confirmer le mot de passe" :class="inputClass(confirmErrors)"
+                        autocomplete="new-password" />
+                    <button type="button" @click="showConfirmPassword = !showConfirmPassword"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                        <font-awesome-icon :icon="['fas', showConfirmPassword ? 'eye-slash' : 'eye']" />
+                    </button>
                     <p v-for="(msg, i) in confirmErrors" :key="i" class="text-red-500 text-sm mt-1">{{ msg }}</p>
                 </div>
 
@@ -51,10 +59,10 @@
 
 <script setup>
 import { ref } from 'vue';
-import Header from '../components/layout/Header.vue';
-import * as authService from '../services/authService.js';
-import { isValidEmail, isValidPassword } from '../helper/FunctionUtils.js';
-import router from '../router/index.js';
+import Header from '../components/layout/HeaderMobile.vue';
+import * as authService from '../services/authService.ts';
+import { isValidEmail, isValidPassword } from '../helper/FunctionUtils.ts';
+import router from '../router/index.ts';
 
 const login = ref('');
 const email = ref('');
@@ -67,6 +75,8 @@ const emailErrors = ref([]);
 const passwordErrors = ref([]);
 const confirmErrors = ref([]);
 
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 
 function inputClass(errors) {
     return [
@@ -86,14 +96,14 @@ function clearErrors() {
 function validate() {
     clearErrors();
 
-    if (!login.value.trim()) { loginErrors.value.push("Le login est obligatoire") }
+    if (!login.value.trim()) loginErrors.value.push("Le login est obligatoire");
 
     if (!email.value.trim()) {
-        emailErrors.value.push("L'email est obligatoire")
-    }
-    else if (!isValidEmail(email.value)) {
+        emailErrors.value.push("L'email est obligatoire");
+    } else if (!isValidEmail(email.value)) {
         emailErrors.value.push("L'email n'est pas valide");
     }
+
     if (!password.value.trim()) {
         passwordErrors.value.push("Le mot de passe est obligatoire");
     } else if (!isValidPassword(password.value)) {
@@ -120,7 +130,7 @@ async function handleRegister() {
 
     try {
         await authService.register(login.value, email.value, password.value);
-        router.push('/');
+        router.push('/profile');
     } catch (e) {
         if (e.response && e.response.status === 400 && e.response.data?.errors) {
             const apiErrors = e.response.data.errors;

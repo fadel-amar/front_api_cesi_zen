@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
 import Home from '../views/Home.vue';
-import Test from '../views/test.vue';
 import LoginForm from '../views/LoginForm.vue';
 import RegisterForm from '../views/RegisterForm.vue';
+import ProfilePage from '../views/ProfilePage.vue';
+import { checkAuthStatus } from '../services/authService';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -12,9 +13,17 @@ const routes: Array<RouteRecordRaw> = [
     component: Home,
   },
   {
-    path: '/test',
-    name: 'Test',
-    component: Test,
+    path: '/profile',
+    name: 'profile',
+    component: ProfilePage,
+    beforeEnter: async (_, __, next) => {
+      const isAuthenticated = await checkAuthStatus();
+      if (isAuthenticated) {
+        next();
+      } else {
+        next('/login');
+      }
+    },
   },
   {
     path: '/login',
@@ -24,8 +33,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/register',
     name: 'Register',
-    component : RegisterForm
-  }
+    component: RegisterForm,
+  },
 ];
 
 const router = createRouter({
