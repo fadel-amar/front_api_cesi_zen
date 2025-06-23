@@ -31,9 +31,10 @@
           <h3 class="text-xl font-semibold">Sérénité Express</h3>
           <p class="text-gray-600 text-sm mt-1">Offre-toi une pause zen</p>
           <div class="flex flex-wrap gap-3 mt-4">
-            <span class="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full">Breathing</span>
-            <span class="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full">Musique apaisante</span>
-            <span class="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full">Relaxation musculaire</span>
+            <router-link v-for="activity in activities" :key="activity.id" :to="`/activities/${activity.id}`"
+              class="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full hover:bg-gray-200 transition">
+              {{ activity.title }}
+            </router-link>
           </div>
         </div>
       </section>
@@ -58,18 +59,22 @@ import AppLayout from '../components/layout/AppLayout.vue'
 import { onMounted, ref } from 'vue'
 import pageService from '../services/pageService'
 import type { PageResponseDTO } from '../models/pageResponse'
+import type { ActivityResponseDTO } from '../models/ActivityResponse'
+import activityService from '../services/ActivityService'
 
 const pages = ref<PageResponseDTO[]>([])
+const activities = ref<ActivityResponseDTO[]>([])
 
 onMounted(async () => {
   try {
     const allPages = await pageService.getAll()
     pages.value = allPages.slice(0, 4)
+    const topActivities = await activityService.getTopActivities();
+    activities.value = topActivities.slice(0, 3)
+
   } catch (error) {
     console.error('Erreur lors du chargement des pages :', error)
   }
 })
 </script>
-<style scoped>
-/* Add any additional custom styles here if needed */
-</style>
+<style scoped></style>

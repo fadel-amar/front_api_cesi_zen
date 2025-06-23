@@ -52,15 +52,21 @@ export async function register(
   }
 }
 
-export async function checkAuthStatus(): Promise<boolean> {
+export async function checkAuthStatus(): Promise<{
+  isLoggedIn: boolean;
+  role?: string;
+}> {
   const token = localStorage.getItem('jwt_token');
-  if (!token) return false;
+  if (!token) return { isLoggedIn: false };
 
   try {
-    await userService.getCurrentUser();
-    return true;
+    const user = await userService.getCurrentUser();
+    return {
+      isLoggedIn: true,
+      role: user.role,
+    };
   } catch {
-    return false;
+    return { isLoggedIn: false };
   }
 }
 

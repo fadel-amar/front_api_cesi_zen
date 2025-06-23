@@ -20,6 +20,10 @@
                 Docs
             </router-link>
 
+            <router-link v-if="isLoggedIn && userRole === 'Admin'" class="hover:text-blue-600 transition">
+                Admin
+            </router-link>
+
             <router-link to="/profile"
                 class="relative flex flex-col items-center text-xs text-gray-600 hover:text-blue-600 transition duration-200"
                 aria-label="Profil">
@@ -54,11 +58,15 @@ import { ref, onMounted } from 'vue';
 import * as authService from '../../services/authService.ts';
 import logo from '@/assets/logo.png'
 
-
 const isLoggedIn = ref(false);
+const userRole = ref('');
 
 onMounted(async () => {
-    isLoggedIn.value = await authService.checkAuthStatus();
-});
+    const { isLoggedIn: logged, role } = await authService.checkAuthStatus();
 
+    if (logged) {
+        isLoggedIn.value = true;
+        userRole.value = role;
+    }
+});
 </script>

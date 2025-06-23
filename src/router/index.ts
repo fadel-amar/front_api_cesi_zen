@@ -17,8 +17,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'profile',
     component: ProfilePage,
     beforeEnter: async (_, __, next) => {
-      const isAuthenticated = await checkAuthStatus();
-      if (isAuthenticated) {
+      const { isLoggedIn } = await checkAuthStatus();
+      if (isLoggedIn) {
         next();
       } else {
         next('/login');

@@ -77,7 +77,6 @@ export async function resetPassword(
   try {
     await api.put('/users/me/reset-password', { oldPassword, newPassword });
   } catch (error: any) {
-    console.log(error);
     const msg =
       error.response?.data?.message ||
       'Erreur lors de la réinitialisation du mot de passe';
