@@ -18,7 +18,7 @@ export async function login(
     localStorage.setItem('jwt_token', response.data.token);
     return response.data;
   } catch (error: any) {
-    const msg = error.response?.data?.message || 'Erreur de connexion';
+    const msg = error.response?.data?.message || 'Identifiants de connexion invalides';
     throw new ApiError(msg, {
       status: error.response?.status,
       data: error.response?.data,

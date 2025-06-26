@@ -1,20 +1,51 @@
 import axios from 'axios';
-import type { FullUserResponse } from '../models/UserResponse';
+import type {
+  FullUserResponse,
+  ListUserResponse,
+} from '../models/UserResponse';
 import api from './api';
 import { ApiError } from '../helper/ApiError';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
 export async function getCurrentUser(): Promise<FullUserResponse> {
+  try {
+    const response = await api.get<FullUserResponse>('/users/me');
+    return response.data;
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'response' in error) {
+      const axiosError = error as any;
+      throw new Error(
+        `Erreur API: ${axiosError.response.status} - ${axiosError.response.statusText}`
+      );
+    }
+    throw new Error('Erreur inconnue lors de la récupération de l’utilisateur');
+  }
+}
+
+export async function getAllUsers(
+  pageNumber = 1,
+  pageSize = 10,
+  identifier?: string
+): Promise<ListUserResponse> {
+  try {
+    const response = await api.get<ListUserResponse>(
+      `/users?pageNumber=${pageNumber}&pageSize=${pageSize}&filter=${
+        identifier || ''
+      }`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateMyAccount(
+  userData: Partial<FullUserResponse>
+): Promise<FullUserResponse> {
   const token = localStorage.getItem('jwt_token');
   if (!token) throw new Error('Token manquant');
 
   try {
-    const response = await axios.get<FullUserResponse>(`${API_BASE}/users/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await api.put<FullUserResponse>('/users/me', { userData });
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
@@ -22,26 +53,18 @@ export async function getCurrentUser(): Promise<FullUserResponse> {
         `Erreur API: ${error.response.status} - ${error.response.statusText}`
       );
     }
-    throw new Error('Erreur inconnue lors de la récupération de l’utilisateur');
+    throw new Error('Erreur inconnue lors de la mise à jour de l’utilisateur');
   }
 }
-
 export async function updateUser(
+  id: number,
   userData: Partial<FullUserResponse>
 ): Promise<FullUserResponse> {
   const token = localStorage.getItem('jwt_token');
   if (!token) throw new Error('Token manquant');
 
   try {
-    const response = await axios.put<FullUserResponse>(
-      `${API_BASE}/users/me`,
-      userData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await api.put<FullUserResponse>(`/users/${id}`, userData);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
@@ -92,12 +115,24 @@ export async function deleteAccount(): Promise<void> {
   if (!token) throw new Error('Token manquant');
 
   try {
-    await axios.delete(`${API_BASE}/users/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    await api.delete('/users/me');
     localStorage.removeItem('jwt_token');
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(
+        `Erreur API: ${error.response.status} - ${error.response.statusText}`
+      );
+    }
+    throw new Error('Erreur inconnue lors de la suppression de l’utilisateur');
+  }
+}
+
+export async function deleteUser(userId: number): Promise<void> {
+  const token = localStorage.getItem('jwt_token');
+  if (!token) throw new Error('Token manquant');
+
+  try {
+    await api.delete(`/users/${userId}`);
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
       throw new Error(

@@ -5,6 +5,11 @@ import LoginForm from '../views/LoginForm.vue';
 import RegisterForm from '../views/RegisterForm.vue';
 import ProfilePage from '../views/ProfilePage.vue';
 import { checkAuthStatus } from '../services/authService';
+import AdminDashboard from '../views/AdminDashboard.vue';
+import ManagementUser from '../views/ManagementUser.vue';
+import ManagementCategory from '../views/ManagementCategory.vue';
+import ManagementActivities from '../views/ManagementActivities.vue';
+import EditActivity from '../views/EditActivity.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -34,6 +39,31 @@ const routes: Array<RouteRecordRaw> = [
     path: '/register',
     name: 'Register',
     component: RegisterForm,
+  },
+  {
+    path: '/admin/dashboard',
+    name: 'AdminDashboard',
+    component: AdminDashboard,
+  },
+  {
+    path: '/admin/users',
+    name: 'AdminUsers',
+    component: ManagementUser,
+  },
+  {
+    path: '/admin/categories',
+    name: 'AdminCategories',
+    component: ManagementCategory,
+  },
+  {
+    path: '/admin/activities',
+    name: 'AdminActivities',
+    component: ManagementActivities,
+  },
+  {
+    path: '/admin/activities/edit/:id',
+    name: 'EditActivity',
+    component: EditActivity,
   },
 ];
 

@@ -20,7 +20,7 @@
                 Docs
             </router-link>
 
-            <router-link v-if="isLoggedIn && userRole === 'Admin'" class="hover:text-blue-600 transition">
+            <router-link v-if="isLoggedIn && userRole === 'Admin'" to="/admin/dashboard" class="hover:text-blue-600 transition">
                 Admin
             </router-link>
 

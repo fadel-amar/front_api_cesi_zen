@@ -59,11 +59,11 @@ import AppLayout from '../components/layout/AppLayout.vue'
 import { onMounted, ref } from 'vue'
 import pageService from '../services/pageService'
 import type { PageResponseDTO } from '../models/pageResponse'
-import type { ActivityResponseDTO } from '../models/ActivityResponse'
+import type { ActivityResponse } from '../models/Activity'
 import activityService from '../services/ActivityService'
 
 const pages = ref<PageResponseDTO[]>([])
-const activities = ref<ActivityResponseDTO[]>([])
+const activities = ref<ActivityResponse[]>([])
 
 onMounted(async () => {
   try {

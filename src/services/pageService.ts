@@ -4,12 +4,12 @@ import type {
   ListPageResponseDTO,
   PageResponseDTO,
   UpdatePageDTO,
-} from '../models/pageResponse';
-import api from './api';
+} from "../models/pageResponse";
+import api from "./api";
 
 const pageService = {
   async getAll(): Promise<PageResponseDTO[]> {
-    const response = await api.get<ListPageResponseDTO>('/pages');
+    const response = await api.get<ListPageResponseDTO>("/pages");
     return response.data.pages;
   },
 
@@ -19,7 +19,7 @@ const pageService = {
   },
 
   async create(data: CreatePageDTO): Promise<FullPageResponseDTO> {
-    const response = await api.post('/pages', data);
+    const response = await api.post("/pages", data);
     return response.data.data;
   },
 
