@@ -4,7 +4,15 @@ import Home from '../views/Home.vue';
 import LoginForm from '../views/LoginForm.vue';
 import RegisterForm from '../views/RegisterForm.vue';
 import ProfilePage from '../views/ProfilePage.vue';
-import { checkAuthStatus } from '../services/authService';
+import AdminDashboard from '../views/AdminDashboard.vue';
+import ManagementUser from '../views/ManagementUser.vue';
+import ManagementCategory from '../views/ManagementCategory.vue';
+import ManagementActivities from '../views/ManagementActivities.vue';
+import EditActivity from '../views/EditActivity.vue';
+import ManagementPage from '../views/ManagementPage.vue';
+import CreatePage from '../views/CreatePage.vue';
+import EditPage from '../views/EditPage.vue';
+import { checkAuthStatus } from '../services/AuthService';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,8 +25,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'profile',
     component: ProfilePage,
     beforeEnter: async (_, __, next) => {
-      const isAuthenticated = await checkAuthStatus();
-      if (isAuthenticated) {
+      const { isLoggedIn } = await checkAuthStatus();
+      if (isLoggedIn) {
         next();
       } else {
         next('/login');
@@ -34,6 +42,46 @@ const routes: Array<RouteRecordRaw> = [
     path: '/register',
     name: 'Register',
     component: RegisterForm,
+  },
+  {
+    path: '/admin/dashboard',
+    name: 'AdminDashboard',
+    component: AdminDashboard,
+  },
+  {
+    path: '/admin/users',
+    name: 'AdminUsers',
+    component: ManagementUser,
+  },
+  {
+    path: '/admin/categories',
+    name: 'AdminCategories',
+    component: ManagementCategory,
+  },
+  {
+    path: '/admin/activities',
+    name: 'AdminActivities',
+    component: ManagementActivities,
+  },
+  {
+    path: '/admin/activities/edit/:id',
+    name: 'EditActivity',
+    component: EditActivity,
+  },
+  {
+    path: '/admin/pages',
+    name: 'AdminPages',
+    component: ManagementPage,
+  },
+  {
+    path: '/admin/pages/create',
+    name: 'CreatePage',
+    component: CreatePage,
+  },
+  {
+    path: '/admin/pages/edit/:id',
+    name: 'EditPage',
+    component: EditPage,
   },
 ];
 

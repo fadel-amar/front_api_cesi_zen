@@ -1,10 +1,29 @@
 import axios from 'axios';
-import type { FullUserResponse } from '../models/UserResponse';
-import api from './api';
+import type {
+  FullUserResponse,
+  ListUserResponse,
+} from '../models/User';
 import { ApiError } from '../helper/ApiError';
+import api from './ApiService';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
+export async function getAllUsers(
+  pageNumber = 1,
+  pageSize = 10,
+  identifier?: string
+): Promise<ListUserResponse> {
+  try {
+    const response = await api.get<ListUserResponse>(
+      `/users?pageNumber=${pageNumber}&pageSize=${pageSize}&filter=${
+        identifier || ''
+      }`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 export async function getCurrentUser(): Promise<FullUserResponse> {
   const token = localStorage.getItem('jwt_token');
   if (!token) throw new Error('Token manquant');
@@ -27,21 +46,14 @@ export async function getCurrentUser(): Promise<FullUserResponse> {
 }
 
 export async function updateUser(
+  id: number,
   userData: Partial<FullUserResponse>
 ): Promise<FullUserResponse> {
   const token = localStorage.getItem('jwt_token');
   if (!token) throw new Error('Token manquant');
 
   try {
-    const response = await axios.put<FullUserResponse>(
-      `${API_BASE}/users/me`,
-      userData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await api.put<FullUserResponse>(`/users/${id}`, userData);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
@@ -99,6 +111,22 @@ export async function deleteAccount(): Promise<void> {
       },
     });
     localStorage.removeItem('jwt_token');
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(
+        `Erreur API: ${error.response.status} - ${error.response.statusText}`
+      );
+    }
+    throw new Error('Erreur inconnue lors de la suppression de l’utilisateur');
+  }
+}
+
+export async function deleteUser(userId: number): Promise<void> {
+  const token = localStorage.getItem('jwt_token');
+  if (!token) throw new Error('Token manquant');
+
+  try {
+    await api.delete(`/users/${userId}`);
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
       throw new Error(

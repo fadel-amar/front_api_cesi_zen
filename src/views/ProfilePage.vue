@@ -2,7 +2,7 @@
     <AppLayout>
         <main class="mt-15 flex-grow px-4 py-10 sm:px-6 md:px-12 bg-gray-50 flex items-center justify-center">
             <div
-                class="w-full max-w-7xl p-8 bg-white rounded-2xl shadow-lg space-y-10 sm:p-10 sm:rounded-3xl sm:shadow-xl relative">
+                class="w-full max-w-7xl p-8 bg-white rounded-2xl shadow-lg space-y-10 pb-20 sm:p-10 sm:rounded-3xl sm:shadow-xl relative">
 
                 <div class="absolute top-4 right-6 z-auto">
                     <button @click="logout"
@@ -129,8 +129,8 @@ import { ref, onMounted } from 'vue'
 import SuccessModal from '../components/SuccessModal.vue'
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue'
 import router from '../router'
-import * as authService from '../services/authService'
-import * as userService from '../services/userService'
+import * as authService from '../services/AuthService'
+import * as userService from '../services/UserService'
 import AppLayout from '../components/layout/AppLayout.vue'
 
 

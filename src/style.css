@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+.btn-primary, .btn-secondary {
+    cursor: pointer;
+}

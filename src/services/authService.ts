@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ApiError } from '../helper/ApiError';
-import * as userService from './userService';
-import type { AuthResponse } from '../models/UserResponse';
+import * as userService from './UserService'
+import type { AuthResponse } from '../models/User';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -18,7 +18,7 @@ export async function login(
     localStorage.setItem('jwt_token', response.data.token);
     return response.data;
   } catch (error: any) {
-    const msg = error.response?.data?.message || 'Erreur de connexion';
+    const msg = error.response?.data?.message || 'Identifiants de connexion invalides';
     throw new ApiError(msg, {
       status: error.response?.status,
       data: error.response?.data,
@@ -52,15 +52,21 @@ export async function register(
   }
 }
 
-export async function checkAuthStatus(): Promise<boolean> {
+export async function checkAuthStatus(): Promise<{
+  isLoggedIn: boolean;
+  role?: string;
+}> {
   const token = localStorage.getItem('jwt_token');
-  if (!token) return false;
+  if (!token) return { isLoggedIn: false };
 
   try {
-    await userService.getCurrentUser();
-    return true;
+    const user = await userService.getCurrentUser();
+    return {
+      isLoggedIn: true,
+      role: user.role,
+    };
   } catch {
-    return false;
+    return { isLoggedIn: false };
   }
 }
 

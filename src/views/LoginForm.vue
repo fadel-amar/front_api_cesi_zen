@@ -71,7 +71,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import * as authService from '../services/authService.ts';
+import * as authService from '../services/AuthService.ts';
 import router from '../router/index.ts';
 import AppLayout from '../components/layout/AppLayout.vue';
 import HeaderMobile from '../components/layout/HeaderMobile.vue';

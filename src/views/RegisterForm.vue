@@ -59,7 +59,7 @@
 <script setup>
 import { ref } from 'vue';
 import Header from '../components/layout/HeaderMobile.vue';
-import * as authService from '../services/authService.ts';
+import * as authService from '../services/AuthService.ts';
 import { isValidEmail, isValidPassword } from '../helper/FunctionUtils.ts';
 import router from '../router/index.ts';
 import AppLayout from '../components/layout/AppLayout.vue';
