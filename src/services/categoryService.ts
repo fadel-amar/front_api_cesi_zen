@@ -1,4 +1,4 @@
-import api from './api';
+import api from './ApiService.ts';
 import type {
   FullCategoryResponse,
   CreateCategory,

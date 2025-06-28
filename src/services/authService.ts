@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ApiError } from '../helper/ApiError';
-import * as userService from './userService';
-import type { AuthResponse } from '../models/UserResponse';
+import * as userService from './UserService'
+import type { AuthResponse } from '../models/User';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 

@@ -1,30 +1,20 @@
 <template>
   <AppLayout>
     <div class="min-h-screen bg-gray-50 text-gray-900 px-4 md:px-16 pb-32 pt-24">
-      <!-- Titre de bienvenue -->
       <h1 class="text-4xl md:text-5xl font-semibold text-center mb-12">Bienvenue sur <span
           class="text-blue-600">CesiZen</span></h1>
 
-      <!-- Catégories -->
       <section>
         <h2 class="text-2xl font-medium text-center mb-6">Activités bien-être à explorer</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <div class="rounded-xl bg-white border border-gray-200 p-6 shadow-sm hover:shadow-md transition duration-200">
-            <h3 class="text-lg font-semibold">🧘‍♀️ Méditation</h3>
-            <p class="text-sm text-gray-500 mt-1">5 à 10 minutes</p>
-          </div>
-          <div class="rounded-xl bg-white border border-gray-200 p-6 shadow-sm hover:shadow-md transition duration-200">
-            <h3 class="text-lg font-semibold">🧎 Yoga</h3>
-            <p class="text-sm text-gray-500 mt-1">10 à 30 minutes</p>
-          </div>
-          <div class="rounded-xl bg-white border border-gray-200 p-6 shadow-sm hover:shadow-md transition duration-200">
-            <h3 class="text-lg font-semibold">🎧 Sonore</h3>
-            <p class="text-sm text-gray-500 mt-1">3 à 5 minutes</p>
-          </div>
+          <router-link v-for="category in categories" :key="category.id" :to="``"
+            class="rounded-xl bg-white border border-gray-200 p-6 shadow-sm hover:shadow-md transition duration-200">
+            <h3 class="text-lg font-semibold"> {{ category.emoji }} {{ category.name }}</h3>
+            <p class="text-sm text-gray-500 mt-1">{{ category.duration }}</p>
+          </router-link>
         </div>
       </section>
 
-      <!-- Activité mise en avant -->
       <section class="mt-14 bg-blue-50 rounded-2xl p-8 border border-blue-200 shadow-sm">
         <h2 class="text-2xl font-medium mb-4">⭐ Activité en vedette</h2>
         <div>
@@ -39,7 +29,6 @@
         </div>
       </section>
 
-      <!-- Documents / Ressources -->
       <section class="mt-12">
         <h2 class="text-2xl font-medium text-center mb-6">Documents utiles</h2>
         <div class="flex flex-wrap justify-center gap-4">
@@ -57,13 +46,16 @@
 <script setup lang="ts">
 import AppLayout from '../components/layout/AppLayout.vue'
 import { onMounted, ref } from 'vue'
-import pageService from '../services/pageService'
-import type { PageResponseDTO } from '../models/pageResponse'
+import pageService from '../services/PageService'
+import type { PageResponse } from '../models/Page'
 import type { ActivityResponse } from '../models/Activity'
 import activityService from '../services/ActivityService'
+import type { CategoryResponse } from '../models/Category'
+import categoryService from '../services/CategoryService'
 
-const pages = ref<PageResponseDTO[]>([])
+const pages = ref<PageResponse[]>([])
 const activities = ref<ActivityResponse[]>([])
+const categories = ref<CategoryResponse[]>([])
 
 onMounted(async () => {
   try {
@@ -71,7 +63,8 @@ onMounted(async () => {
     pages.value = allPages.slice(0, 4)
     const topActivities = await activityService.getTopActivities();
     activities.value = topActivities.slice(0, 3)
-
+    const allCategories = (await categoryService.getAll()).categories;
+    categories.value = allCategories.slice(0, 3)
   } catch (error) {
     console.error('Erreur lors du chargement des pages :', error)
   }

@@ -50,7 +50,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import * as authService from '../../services/authService.ts';
+import * as authService from '../../services/AuthService.ts';
 import router from '../../router/index.ts';
 const isLoggedIn = ref(false);
 const userRole = ref('');

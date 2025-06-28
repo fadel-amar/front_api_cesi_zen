@@ -4,7 +4,7 @@ import type {
   FullActivityResponse,
   ListActivityResponse,
 } from '../models/Activity';
-import api from './api';
+import api from './ApiService';
 
 const activityService = {
   async getTopActivities(): Promise<ActivityResponse[]> {

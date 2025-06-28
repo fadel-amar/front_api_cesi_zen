@@ -1,8 +1,8 @@
 <template>
     <AppLayout>
-        <div class="min-h-screen px-4 sm:px-8 md:px-16 pt-16 sm:pt-24 pb-10 bg-custom text-gray-900">
-            <h1 class="text-2xl sm:text-3xl font-semibold text-center mb-6">📝 Modifier une activité</h1>
+        <div class="min-h-screen px-4 sm:px-8 md:px-16 pt-16 sm:pt-24 pb-20 bg-custom text-gray-900">
             <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
+                <h1 class="text-2xl sm:text-3xl font-semibold text-center mb-6">📝 Modifier une activité</h1>
                 <form @submit.prevent="handleSubmit" class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Titre</label>
@@ -57,7 +57,7 @@
                     <div class="flex items-center">
                         <input v-model="form.status" type="checkbox" id="status"
                             class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-                        <label for="status" class="ml-2 block text-sm text-gray-700">Activité active</label>
+                        <label for="status" class="ml-2 block text-sm text-gray-700">Active</label>
                     </div>
 
                     <div class="flex justify-end gap-4 pt-4">
@@ -81,8 +81,8 @@ import AppLayout from '@/components/layout/AppLayout.vue'
 import type { UpdateActivity } from '../models/Activity'
 import type { CategoryResponse } from '../models/Category'
 import activityService from '../services/ActivityService'
-import categoryService from '../services/CategoryService'
 import SuccessModal from '../components/SuccessModal.vue'
+import categoryService from '../services/CategoryService'
 const URL_MEDIA: string = import.meta.env.VITE_URL_MEDIA;
 
 const route = useRoute()

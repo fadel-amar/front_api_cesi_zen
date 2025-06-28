@@ -2,24 +2,11 @@ import axios from 'axios';
 import type {
   FullUserResponse,
   ListUserResponse,
-} from '../models/UserResponse';
-import api from './api';
+} from '../models/User';
 import { ApiError } from '../helper/ApiError';
+import api from './ApiService';
 
-export async function getCurrentUser(): Promise<FullUserResponse> {
-  try {
-    const response = await api.get<FullUserResponse>('/users/me');
-    return response.data;
-  } catch (error: unknown) {
-    if (error && typeof error === 'object' && 'response' in error) {
-      const axiosError = error as any;
-      throw new Error(
-        `Erreur API: ${axiosError.response.status} - ${axiosError.response.statusText}`
-      );
-    }
-    throw new Error('Erreur inconnue lors de la récupération de l’utilisateur');
-  }
-}
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export async function getAllUsers(
   pageNumber = 1,
@@ -37,15 +24,16 @@ export async function getAllUsers(
     throw error;
   }
 }
-
-export async function updateMyAccount(
-  userData: Partial<FullUserResponse>
-): Promise<FullUserResponse> {
+export async function getCurrentUser(): Promise<FullUserResponse> {
   const token = localStorage.getItem('jwt_token');
   if (!token) throw new Error('Token manquant');
 
   try {
-    const response = await api.put<FullUserResponse>('/users/me', { userData });
+    const response = await axios.get<FullUserResponse>(`${API_BASE}/users/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
@@ -53,9 +41,10 @@ export async function updateMyAccount(
         `Erreur API: ${error.response.status} - ${error.response.statusText}`
       );
     }
-    throw new Error('Erreur inconnue lors de la mise à jour de l’utilisateur');
+    throw new Error('Erreur inconnue lors de la récupération de l’utilisateur');
   }
 }
+
 export async function updateUser(
   id: number,
   userData: Partial<FullUserResponse>
@@ -100,6 +89,7 @@ export async function resetPassword(
   try {
     await api.put('/users/me/reset-password', { oldPassword, newPassword });
   } catch (error: any) {
+    console.log(error);
     const msg =
       error.response?.data?.message ||
       'Erreur lors de la réinitialisation du mot de passe';
@@ -115,7 +105,11 @@ export async function deleteAccount(): Promise<void> {
   if (!token) throw new Error('Token manquant');
 
   try {
-    await api.delete('/users/me');
+    await axios.delete(`${API_BASE}/users/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     localStorage.removeItem('jwt_token');
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {

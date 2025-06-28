@@ -55,7 +55,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import * as authService from '../../services/authService.ts';
+import * as authService from '../../services/AuthService.ts';
 import logo from '@/assets/logo.png'
 
 const isLoggedIn = ref(false);

@@ -8,6 +8,7 @@ import {library, config} from '@fortawesome/fontawesome-svg-core';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {faEye, faEyeSlash, faCheckCircle, faRightFromBracket} from '@fortawesome/free-solid-svg-icons'
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import 'quill/dist/quill.snow.css'
 
 import 'emoji-picker-element'
 

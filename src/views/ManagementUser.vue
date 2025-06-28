@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="min-h-screen px-4 sm:px-8 md:px-16 pt-16 sm:pt-24 pb-10 bg-custom text-gray-900">
+    <div class="min-h-screen px-4 sm:px-8 md:px-16 pt-16 sm:pt-24 pb-24 bg-custom text-gray-900">
       <div class="mb-6 sm:mb-8">
         <h1 class="text-2xl sm:text-3xl font-semibold text-center w-full">👥 Gestion des utilisateurs</h1>
         <div class="flex justify-end mt-2">
@@ -101,25 +101,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import AppLayout from '@/components/layout/AppLayout.vue'
 import ConfirmModal from '@/components/ConfirmDeleteModal.vue'
 import EditUserModal from '@/components/Management/EditUserModal.vue'
 import ErrorModal from '@/components/ErrorModal.vue'
-import * as userService from '../services/userService.ts'
-import type { UserResponse, ListUserResponse } from '../models/UserResponse.ts'
+import * as userService from '../services/UserService'
+import type { UserResponse, ListUserResponse } from '../models/User.ts'
+import { useContextMenu } from '../components/UseContextMenu.ts'
 
 const users = ref<UserResponse[]>([])
 const filters = ref({ login: '' })
 const pagination = ref({ pageNumber: 1, pageSize: 10, totalPages: 1 })
-const actionMenuId = ref<number | null>(null)
-const menuRefs = ref<{ [key: number]: HTMLElement | null }>({})
-const menuPosition = ref({ top: 0, left: 0 })
 const showConfirmModal = ref(false)
 const userIdToDelete = ref<number | null>(null)
 const shouldShowEditModal = ref(false)
 const selectedUser = ref<UserResponse | null>(null)
 const showErrorModal = ref(false)
+
+
+const { actionMenuId, menuRefs, menuPosition, openActionMenu, closeMenu } = useContextMenu()
+
 
 const fetchUsers = async () => {
   try {
@@ -144,26 +146,12 @@ const changePage = (page: number) => {
   fetchUsers()
 }
 
-const openActionMenu = (id: number, event: MouseEvent) => {
-  actionMenuId.value = actionMenuId.value === id ? null : id
-  if (actionMenuId.value !== null) {
-    const button = event.currentTarget as HTMLElement
-    const rect = button.getBoundingClientRect()
-    const menuWidth = window.innerWidth < 640 ? 128 : 144
-    let left = rect.right + window.scrollX - menuWidth
-    if (left < 0) left = 8
-    if (left + menuWidth > window.innerWidth) left = window.innerWidth - menuWidth - 8
-    menuPosition.value = {
-      top: rect.bottom + window.scrollY + 4,
-      left
-    }
-  }
-}
+
 
 const showDeleteConfirmModal = (id: number) => {
   userIdToDelete.value = id
   showConfirmModal.value = true
-  actionMenuId.value = null
+  closeMenu()
 }
 
 const confirmDelete = async () => {
@@ -187,7 +175,7 @@ const cancelDelete = () => {
 const showEditModal = (user: UserResponse) => {
   selectedUser.value = user
   shouldShowEditModal.value = true
-  actionMenuId.value = null
+  closeMenu()
 }
 
 const confirmEdit = async (userData: Partial<UserResponse>) => {
@@ -208,14 +196,6 @@ const cancelEdit = () => {
   selectedUser.value = null
 }
 
-const handleClickOutside = (event: MouseEvent) => {
-  if (actionMenuId.value === null) return
-  const menu = menuRefs.value[actionMenuId.value]
-  if (menu && !menu.contains(event.target as Node)) {
-    actionMenuId.value = null
-  }
-}
-
 watch(shouldShowEditModal, (newVal) => {
   if (newVal && !selectedUser.value) {
     shouldShowEditModal.value = false
@@ -226,12 +206,8 @@ onMounted(() => {
   shouldShowEditModal.value = false
   selectedUser.value = null
   fetchUsers()
-  document.addEventListener('click', handleClickOutside)
 })
 
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <div class="min-h-screen px-4 sm:px-8 md:px-16 pt-16 sm:pt-24 pb-10 bg-custom text-gray-900">
+    <div class="min-h-screen px-4 sm:px-8 md:px-16 pt-16 sm:pt-24 pb-24 bg-custom text-gray-900">
       <div class="mb-6 sm:mb-8">
         <h1 class="text-2xl sm:text-3xl font-semibold text-center w-full">📂 Gestion des catégories</h1>
         <div class="flex justify-end mt-2">
@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted } from 'vue'
 import AppLayout from '@/components/layout/AppLayout.vue'
 import ConfirmModal from '@/components/ConfirmDeleteModal.vue'
 import EditCategoryModal from '@/components/Management/EditCategoryModal.vue'
@@ -94,12 +94,12 @@ import CreateCategoryModal from '@/components/Management/CreateCategoryModal.vue
 import ErrorModal from '@/components/ErrorModal.vue'
 import SuccessModal from '@/components/SuccessModal.vue'
 import type { CategoryResponse, CreateCategory, UpdateCategory } from '../models/Category.ts'
+import { useContextMenu } from '../components/UseContextMenu.ts'
 import categoryService from '../services/CategoryService.ts'
+const { actionMenuId, menuRefs, menuPosition, openActionMenu, closeMenu } = useContextMenu()
+
 
 const categories = ref<CategoryResponse[]>([])
-const actionMenuId = ref<number | null>(null)
-const menuRefs = ref<{ [key: number]: HTMLElement | null }>({})
-const menuPosition = ref({ top: 0, left: 0 })
 const showConfirmModal = ref(false)
 const categoryIdToDelete = ref<number | null>(null)
 const showEditModal = ref(false)
@@ -118,34 +118,11 @@ const fetchCategories = async () => {
   }
 }
 
-const openActionMenu = (id: number, event: MouseEvent) => {
-  actionMenuId.value = actionMenuId.value === id ? null : id
-  if (actionMenuId.value !== null) {
-    const button = event.currentTarget as HTMLElement
-    const rect = button.getBoundingClientRect()
-    const menuWidth = window.innerWidth < 640 ? 128 : 144
-    let left = rect.right + window.scrollX - menuWidth
-    if (left < 0) left = 8
-    if (left + menuWidth > window.innerWidth) left = window.innerWidth - menuWidth - 8
-    menuPosition.value = {
-      top: rect.bottom + window.scrollY + 4,
-      left
-    }
-  }
-}
-
-const handleClickOutside = (event: MouseEvent) => {
-  if (actionMenuId.value === null) return
-  const menu = menuRefs.value[actionMenuId.value]
-  if (menu && !menu.contains(event.target as Node)) {
-    actionMenuId.value = null
-  }
-}
 
 const confirmDeleteCategory = (id: number) => {
   categoryIdToDelete.value = id
   showConfirmModal.value = true
-  actionMenuId.value = null
+  closeMenu()
 }
 
 const deleteCategory = async () => {
@@ -175,8 +152,8 @@ const cancelDelete = () => {
 const editCategory = (cat: CategoryResponse) => {
   selectedCategory.value = cat
   showEditModal.value = true
-  actionMenuId.value = null
   apiErrors.value = {}
+  closeMenu()
 }
 
 const confirmEditCategory = async (category: UpdateCategory) => {
@@ -195,7 +172,7 @@ const confirmEditCategory = async (category: UpdateCategory) => {
       } else {
         showErrorModal.value = true
       }
-    } catch {
+    } catch (err) {
       showErrorModal.value = true
     }
   }
@@ -223,12 +200,9 @@ onMounted(() => {
   showEditModal.value = false
   showAddModal.value = false
   fetchCategories()
-  document.addEventListener('click', handleClickOutside)
 })
 
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
+
 </script>
 
 <style scoped>

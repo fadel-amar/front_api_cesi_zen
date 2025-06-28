@@ -1,5 +1,6 @@
 <template>
-    <div v-if="visible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div v-if="visible" class="fixed inset-0 backdrop-blur-sm bg-black/10 flex items-center justify-center z-50"
+        @click.stop>
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-6 animate-fade-in">
             <h2 class="text-xl font-bold text-gray-800">Modifier l'utilisateur</h2>
             <form @submit.prevent="handleSubmit" class="space-y-4">
@@ -65,7 +66,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import type { UserResponse } from '../../models/UserResponse.ts'
+import type { UserResponse } from '../../models/User.ts'
 
 const { visible, user } = defineProps<{
     visible: boolean
