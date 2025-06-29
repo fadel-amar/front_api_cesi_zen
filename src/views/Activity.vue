@@ -73,6 +73,8 @@ const media = `${URL_MEDIA}`
 const videoRef = ref<HTMLVideoElement | null>(null)
 const audioRef = ref<HTMLAudioElement | null>(null)
 const showErrorModal = ref(false);
+const audioIntro = new Audio('/sounds/start-activity.wav');
+audioIntro.volume = 0.8;
 const id = Number(route.params.id)
 let messageModal = "L'activité n'a pas été trouvée"
 
@@ -100,10 +102,7 @@ onMounted(async () => {
 
 const startActivity = () => {
     isPlaying.value = true;
-    const audioIntro = new Audio('/sounds/start-activity.wav');
-    audioIntro.volume = 0.8;
     audioIntro.play();
-
     audioIntro.onended = () => {
         isIntroPlaying.value = true;
         nextTick(() => {
@@ -115,23 +114,50 @@ const startActivity = () => {
 
 const stopActivity = () => {
     isPlaying.value = false
+    audioIntro.pause();
+    audioIntro.currentTime = 0;
     isIntroPlaying.value = false;
     if (videoRef.value) videoRef.value.pause()
     if (audioRef.value) audioRef.value.pause()
 }
 
 const toggleFavorite = async () => {
-    const response = await activityService.toogleFavorite(id)
-    if (response.status === 200) {
-        isFavorite.value = !isFavorite.value
+    try {
+        const response = await activityService.toogleFavorite(id)
+        if (response.status === 200) {
+            isFavorite.value = !isFavorite.value
+        }
+    } catch (error: unknown) {
+        const err = error as any;
+        if (err?.status === 401) {
+            messageModal = "Vous devez être connecté pour ajouter une activité aux favoris."
+            showErrorModal.value = true
+        } else {
+            messageModal = "Une erreur est survenue lors de la modification des favoris."
+            showErrorModal.value = true
+        }
     }
 }
-const tooggleLater = async () => {
-    const response = await activityService.toogleToLater(id)
 
-    if (response.status === 200) {
-        isLater.value = !isLater.value
+const tooggleLater = async () => {
+    try {
+        const response = await activityService.toogleToLater(id)
+        if (response.status === 200) {
+            isLater.value = !isLater.value
+        }
+    } catch (error: unknown) {
+        const err = error as any;
+        if (err?.status === 401) {
+            messageModal = "Vous devez être connecté pour enregistrer une activité pour plus tard."
+            showErrorModal.value = true
+            return
+        } else {
+            messageModal = "Une erreur est survenue lors de la modification de l'activité."
+            showErrorModal.value = true
+            return
+        }
     }
+
 }
 
 const redirectToActivities = () => {

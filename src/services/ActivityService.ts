@@ -68,6 +68,16 @@ const activityService = {
     const response = await api.post(`/activities/toLater/${id}`);
     return response;
   },
+  async getFavorites(): Promise<ListActivityResponse> {
+    const response = await api.get<ListActivityResponse>(
+      '/activities/favorites'
+    );
+    return response.data;
+  },
+  async getSaved(): Promise<ListActivityResponse> {
+    const response = await api.get<ListActivityResponse>('/activities/toLater');
+    return response.data;
+  },
 };
 
 export default activityService;

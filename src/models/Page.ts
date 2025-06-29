@@ -6,7 +6,7 @@ export interface UserShortResponse {
 export interface PageResponse {
   id: number;
   title: string;
-  createdAt :string;
+  createdAt: string;
   visibility: boolean;
 }
 
@@ -26,7 +26,6 @@ export interface ListPageResponse {
 export interface CreatePage {
   title: string;
   content: string;
-  link: string;
 }
 
 export interface UpdatePage {

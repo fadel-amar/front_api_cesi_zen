@@ -5,7 +5,7 @@
 
             <h1 class="text-3xl font-bold mb-2">{{ page?.title }}</h1>
             <p class="text-gray-500 text-sm mb-4">
-                Créée par {{ page.user.username }} le {{ new Date(page.createdAt).toLocaleDateString('fr-FR') }}
+                Créée/Modifié par {{ page.user.username }} le {{ new Date(page.createdAt).toLocaleDateString('fr-FR') }}
             </p>
 
             <quill-editor v-if="page?.content" v-model:content="page.content" contentType="html"
