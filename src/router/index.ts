@@ -13,6 +13,17 @@ import ManagementPage from '../views/ManagementPage.vue';
 import CreatePage from '../views/CreatePage.vue';
 import EditPage from '../views/EditPage.vue';
 import { checkAuthStatus } from '../services/AuthService';
+import Activities from '../views/Activities.vue';
+import Activity from '../views/Activity.vue';
+
+const adminGuard = async (_: any, __: any, next: any) => {
+  const { isLoggedIn, role } = await checkAuthStatus();
+  if (isLoggedIn && role === 'Admin') {
+    next();
+  } else {
+    next('/profile');
+  }
+};
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -47,41 +58,59 @@ const routes: Array<RouteRecordRaw> = [
     path: '/admin/dashboard',
     name: 'AdminDashboard',
     component: AdminDashboard,
+    beforeEnter: adminGuard,
   },
   {
     path: '/admin/users',
     name: 'AdminUsers',
     component: ManagementUser,
+    beforeEnter: adminGuard,
   },
   {
     path: '/admin/categories',
     name: 'AdminCategories',
     component: ManagementCategory,
+    beforeEnter: adminGuard,
   },
   {
     path: '/admin/activities',
     name: 'AdminActivities',
     component: ManagementActivities,
+    beforeEnter: adminGuard,
   },
   {
     path: '/admin/activities/edit/:id',
     name: 'EditActivity',
     component: EditActivity,
+    beforeEnter: adminGuard,
   },
   {
     path: '/admin/pages',
     name: 'AdminPages',
     component: ManagementPage,
+    beforeEnter: adminGuard,
   },
   {
     path: '/admin/pages/create',
     name: 'CreatePage',
     component: CreatePage,
+    beforeEnter: adminGuard,
   },
   {
     path: '/admin/pages/edit/:id',
     name: 'EditPage',
     component: EditPage,
+    beforeEnter: adminGuard,
+  },
+  {
+    path: '/activities',
+    name: 'Activities',
+    component: Activities,
+  },
+  {
+    path: '/activities/:id',
+    name: 'ActivityDetails',
+    component: Activity,
   },
 ];
 

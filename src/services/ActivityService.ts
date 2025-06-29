@@ -14,9 +14,20 @@ const activityService = {
     return response.data.activities;
   },
 
-  async getAll(): Promise<ActivityResponse[]> {
+  async getAll(): Promise<ListActivityResponse> {
     const response = await api.get<ListActivityResponse>('/activities');
-    return response.data.activities;
+    return response.data;
+  },
+
+  async getFiltered(params: {
+    title?: string;
+    category?: string;
+    typeactivity?: string;
+  }): Promise<ListActivityResponse> {
+    const response = await api.get<ListActivityResponse>('/activities', {
+      params,
+    });
+    return response.data;
   },
 
   async getById(id: number): Promise<FullActivityResponse> {
@@ -47,6 +58,15 @@ const activityService = {
       '/activities/types'
     );
     return response.data;
+  },
+
+  async toogleFavorite(id: number) {
+    const response = await api.post(`/activities/favorites/${id}`);
+    return response;
+  },
+  async toogleToLater(id: number) {
+    const response = await api.post(`/activities/toLater/${id}`);
+    return response;
   },
 };
 

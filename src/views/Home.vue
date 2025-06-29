@@ -7,8 +7,10 @@
       <section>
         <h2 class="text-2xl font-medium text-center mb-6">Activités bien-être à explorer</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <router-link v-for="category in categories" :key="category.id" :to="``"
-            class="rounded-xl bg-white border border-gray-200 p-6 shadow-sm hover:shadow-md transition duration-200">
+          <router-link v-for="category in categories" :key="category.id" :to="{
+            path: '/activities',
+            query: { category: category.id }
+          }" class="rounded-xl bg-white border border-gray-200 p-6 shadow-sm hover:shadow-md transition duration-200">
             <h3 class="text-lg font-semibold"> {{ category.emoji }} {{ category.name }}</h3>
             <p class="text-sm text-gray-500 mt-1">{{ category.duration }}</p>
           </router-link>
@@ -60,11 +62,11 @@ const categories = ref<CategoryResponse[]>([])
 onMounted(async () => {
   try {
     const allPages = await pageService.getAll()
-    pages.value = allPages.slice(0, 4)
+    pages.value = allPages.filter(page => page.visibility === true).slice(0, 4)
     const topActivities = await activityService.getTopActivities();
     activities.value = topActivities.slice(0, 3)
     const allCategories = (await categoryService.getAll()).categories;
-    categories.value = allCategories.slice(0, 3)
+    categories.value = allCategories.filter(category => category.status === true).slice(0, 3)
   } catch (error) {
     console.error('Erreur lors du chargement des pages :', error)
   }

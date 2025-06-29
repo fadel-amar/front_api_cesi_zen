@@ -8,12 +8,12 @@
       Accueil
     </router-link>
 
-    <a href="#" class="flex flex-col items-center text-xs hover:text-blue-600 transition" aria-label="Activités">
+    <router-link to="/activities" class="flex flex-col items-center text-xs hover:text-blue-600 transition" aria-label="Activités">
       <svg class="h-6 w-6 mb-0.5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
       Activités
-    </a>
+    </router-link>
 
     <a href="#" class="flex flex-col items-center text-xs hover:text-blue-600 transition" aria-label="Documentation">
       <svg class="h-6 w-6 mb-0.5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">

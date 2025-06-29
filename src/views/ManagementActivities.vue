@@ -123,7 +123,7 @@ const { actionMenuId, menuRefs, menuPosition, openActionMenu, closeMenu } = useC
 
 const fetchActivities = async () => {
   try {
-    activities.value = await activityService.getAll()
+    activities.value = (await activityService.getAll()).activities
   } catch {
     showErrorModal.value = true
   }
