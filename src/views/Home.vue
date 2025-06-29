@@ -34,7 +34,7 @@
       <section class="mt-12">
         <h2 class="text-2xl font-medium text-center mb-6">Documents utiles</h2>
         <div class="flex flex-wrap justify-center gap-4">
-          <router-link v-for="page in pages" :key="page.id" :to="`/docs/${page.id}`"
+          <router-link v-for="page in pages" :key="page.id" :to="`/pages/${page.id}`"
             class="rounded-lg bg-white border border-gray-200 px-6 py-4 shadow-sm hover:shadow-md transition block text-center hover:text-blue-600">
             <h3 class="text-lg font-semibold">{{ page.title }}</h3>
           </router-link>

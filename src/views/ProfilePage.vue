@@ -29,7 +29,6 @@
                         Date(user.updatedAt).toLocaleDateString() }}</p>
                 </div>
 
-                <!-- Modifier le login -->
                 <section>
                     <h2 class="text-xl font-semibold mb-3 text-gray-700">Modifier le nom d'utilisateur</h2>
                     <form @submit.prevent="updateLogin" class="space-y-3">
@@ -48,7 +47,6 @@
                     </form>
                 </section>
 
-                <!-- Modifier le mot de passe -->
                 <section>
                     <h2 class="text-xl font-semibold mb-3 text-gray-700">Changer le mot de passe</h2>
                     <form @submit.prevent="changePassword" class="space-y-3 relative">
@@ -63,7 +61,6 @@
                             </button>
                         </div>
 
-                        <!-- Nouveau mot de passe -->
                         <div class="relative">
                             <input :type="showNewPassword ? 'text' : 'password'" v-model="newPassword"
                                 autocomplete="new-password" placeholder="Nouveau mot de passe"
@@ -75,7 +72,6 @@
                             </button>
                         </div>
 
-                        <!-- Confirmation -->
                         <div class="relative">
                             <input :type="showConfirmPassword ? 'text' : 'password'" v-model="confirmPassword"
                                 autocomplete="new-password" placeholder="Confirmer le nouveau mot de passe"
@@ -100,7 +96,6 @@
                     </form>
                 </section>
 
-                <!-- Suppression de compte -->
                 <section>
                     <h2 class="text-xl font-semibold mb-3 text-red-500">Supprimer le compte</h2>
                     <p class="text-sm text-gray-500 mb-4 text-center">
