@@ -8,7 +8,6 @@ import AdminDashboard from '../views/AdminDashboard.vue';
 import ManagementUser from '../views/ManagementUser.vue';
 import ManagementCategory from '../views/ManagementCategory.vue';
 import ManagementActivities from '../views/ManagementActivities.vue';
-import EditActivity from '../views/EditActivity.vue';
 import ManagementPage from '../views/ManagementPage.vue';
 import CreatePage from '../views/CreatePage.vue';
 import EditPage from '../views/EditPage.vue';
@@ -16,6 +15,8 @@ import { checkAuthStatus } from '../services/AuthService';
 import Activities from '../views/Activities.vue';
 import Activity from '../views/Activity.vue';
 import Pages from '../views/Pages.vue';
+import Page from '../views/Page.vue';
+import NotFound from '../views/NotFound.vue';
 
 const adminGuard = async (_: any, __: any, next: any) => {
   const { isLoggedIn, role } = await checkAuthStatus();
@@ -82,7 +83,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/admin/activities/edit/:id',
     name: 'EditActivity',
-    component: EditActivity,
+    component: import('../views/EditActivity.vue'),
     beforeEnter: adminGuard,
   },
   {
@@ -121,7 +122,12 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/pages/:id',
     name: 'PageDetails',
-    component: () => import('../views/Page.vue'),
+    component: Page,
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound,
   },
 ];
 
