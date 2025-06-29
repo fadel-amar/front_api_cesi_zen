@@ -16,8 +16,8 @@
                 Activités
             </router-link>
 
-            <router-link to="/docs" class="hover:text-blue-600 transition">
-                Docs
+            <router-link to="/pages" class="hover:text-blue-600 transition">
+                Pages
             </router-link>
 
             <router-link v-if="isLoggedIn && userRole === 'Admin'" to="/admin/dashboard" class="hover:text-blue-600 transition">

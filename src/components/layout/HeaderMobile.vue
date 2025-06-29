@@ -8,20 +8,22 @@
       Accueil
     </router-link>
 
-    <router-link to="/activities" class="flex flex-col items-center text-xs hover:text-blue-600 transition" aria-label="Activités">
+    <router-link to="/activities" class="flex flex-col items-center text-xs hover:text-blue-600 transition"
+      aria-label="Activités">
       <svg class="h-6 w-6 mb-0.5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
       Activités
     </router-link>
 
-    <a href="#" class="flex flex-col items-center text-xs hover:text-blue-600 transition" aria-label="Documentation">
+    <router-link to="/pages" class="flex flex-col items-center text-xs hover:text-blue-600 transition"
+      aria-label="Activités">
       <svg class="h-6 w-6 mb-0.5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M8 16h8M8 12h8m-6-8h6a2 2 0 012 2v12a2 2 0 01-2 2h-6a2 2 0 01-2-2V6a2 2 0 012-2z" />
       </svg>
-      Docs
-    </a>
+      Pages
+    </router-link>
     <router-link v-if="isLoggedIn && userRole === 'Admin'" to="/admin/dashboard"
       class="flex flex-col items-center text-xs hover:text-blue-600 transition" aria-label="Admin">
       <svg class="h-6 w-6 mb-0.5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">

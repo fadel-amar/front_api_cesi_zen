@@ -15,6 +15,7 @@ import EditPage from '../views/EditPage.vue';
 import { checkAuthStatus } from '../services/AuthService';
 import Activities from '../views/Activities.vue';
 import Activity from '../views/Activity.vue';
+import Pages from '../views/Pages.vue';
 
 const adminGuard = async (_: any, __: any, next: any) => {
   const { isLoggedIn, role } = await checkAuthStatus();
@@ -111,6 +112,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/activities/:id',
     name: 'ActivityDetails',
     component: Activity,
+  },
+  {
+    path: '/pages',
+    name: 'Pages',
+    component: Pages,
+  },
+  {
+    path: '/pages/:id',
+    name: 'PageDetails',
+    component: () => import('../views/Page.vue'),
   },
 ];
 

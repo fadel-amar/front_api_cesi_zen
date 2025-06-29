@@ -127,7 +127,8 @@ const globalError = ref(props.globalError || '')
 
 const fetchCategories = async () => {
   try {
-    categories.value = (await categoryService.getAll()).categories;
+    const allCategories = (await categoryService.getAll()).categories;
+    categories.value = allCategories.filter(cat => cat.status === true);
   } catch {
     emit('cancel')
   }

@@ -129,8 +129,6 @@ const fetchActivities = async () => {
   }
 }
 
-
-
 const confirmDeleteActivity = (id: number) => {
   activityIdToDelete.value = id
   showConfirmModal.value = true
@@ -166,14 +164,12 @@ const createActivity = async (activity: CreateActivity) => {
       successMessage.value = 'Activité créée avec succès'
       showAddModal.value = false
       globalError.value = ''
-    } else if (response.status === 400) {
-      globalError.value = response.data?.message || 'Erreur lors de la création.'
-    } else {
-      globalError.value = 'Erreur inconnue.'
-      showErrorModal.value = true
     }
   } catch (error: any) {
-    globalError.value = error.response?.data?.message || 'Erreur inattendue.'
+    if (error.response.status === 400) {
+    } else {
+      globalError.value = 'Erreur lors de la création de l\'activité.'
+    }
     showErrorModal.value = true
   }
 }

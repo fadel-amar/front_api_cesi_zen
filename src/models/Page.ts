@@ -6,6 +6,7 @@ export interface UserShortResponse {
 export interface PageResponse {
   id: number;
   title: string;
+  createdAt :string;
   visibility: boolean;
 }
 
