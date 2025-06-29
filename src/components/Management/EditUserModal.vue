@@ -4,7 +4,6 @@
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-6 animate-fade-in">
             <h2 class="text-xl font-bold text-gray-800">Modifier l'utilisateur</h2>
             <form @submit.prevent="handleSubmit" class="space-y-4">
-                <!-- Login -->
                 <div>
                     <label for="login" class="block text-sm font-medium text-gray-700">Login</label>
                     <input id="login" v-model="formData.login" type="text" maxlength="25"
@@ -13,7 +12,6 @@
                     <p v-if="errors.login" class="text-red-500 text-xs mt-1">{{ errors.login }}</p>
                 </div>
 
-                <!-- Email -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                     <input id="email" v-model="formData.email" type="email" maxlength="150"
@@ -22,7 +20,6 @@
                     <p v-if="errors.email" class="text-red-500 text-xs mt-1">{{ errors.email }}</p>
                 </div>
 
-                <!-- Role -->
                 <div>
                     <label for="role" class="block text-sm font-medium text-gray-700">Rôle</label>
                     <select id="role" v-model="formData.role"
@@ -34,21 +31,18 @@
                     <p v-if="errors.role" class="text-red-500 text-xs mt-1">{{ errors.role }}</p>
                 </div>
 
-                <!-- Disabled -->
                 <div class="flex items-center">
                     <input id="disabled" v-model="formData.disabled" type="checkbox"
                         class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
                     <label for="disabled" class="ml-2 text-sm text-gray-700">Désactivé</label>
                 </div>
 
-                <!-- Banned -->
                 <div class="flex items-center">
                     <input id="banned" v-model="formData.banned" type="checkbox"
                         class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
                     <label for="banned" class="ml-2 text-sm text-gray-700">Banni</label>
                 </div>
 
-                <!-- Boutons -->
                 <div class="flex justify-center gap-4 mt-6">
                     <button type="button" @click="$emit('cancel')"
                         class="bg-gray-300 text-gray-800 px-4 py-2 rounded-xl hover:bg-gray-400 transition">

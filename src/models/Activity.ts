@@ -33,6 +33,8 @@ export interface FullActivityResponse {
   user: number;
   createdAt: string;
   updatedAt: string;
+  isFavorite: false,
+  isToLater: true
 }
 
 export interface UpdateActivity {

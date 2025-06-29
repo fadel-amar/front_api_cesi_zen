@@ -115,7 +115,8 @@ const fetchData = async () => {
             id: Number(id),
             name: String(name)
         }))
-        categories.value = (await categoryService.getAll()).categories;
+        const allCategories = (await categoryService.getAll()).categories;
+        categories.value = allCategories.filter((cat: CategoryResponse) => cat.status === true);
 
         const data = await activityService.getById(activityId)
 
