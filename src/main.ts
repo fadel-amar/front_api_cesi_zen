@@ -10,6 +10,8 @@ import {
   faEyeSlash,
   faCheckCircle,
   faRightFromBracket,
+  faHeart,
+  faClock,
 } from '@fortawesome/free-solid-svg-icons';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import 'quill/dist/quill.snow.css';
@@ -18,7 +20,8 @@ import 'emoji-picker-element';
 
 config.autoAddCss = false;
 
-library.add(faEye, faEyeSlash, faCheckCircle, faRightFromBracket);
+
+library.add(faEye, faEyeSlash, faCheckCircle, faRightFromBracket, faHeart, faClock);
 
 const app = createApp(App);
 

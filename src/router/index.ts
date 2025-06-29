@@ -129,6 +129,16 @@ const routes: Array<RouteRecordRaw> = [
     name: 'NotFound',
     component: NotFound,
   },
+  {
+    path: '/activities/favorites',
+    name: 'FavoriteActivities',
+    component: () => import('../views/FavoriteActivities.vue'),
+  },
+  {
+    path: '/activities/saved',
+    name: 'SavedActivities',
+    component: () => import('../views/SavedActivities.vue'),
+  },
 ];
 
 const router = createRouter({

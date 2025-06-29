@@ -3,15 +3,13 @@
         <main class="mt-15 flex-grow px-4 py-10 sm:px-6 md:px-12 bg-gray-50 flex items-center justify-center">
             <div
                 class="w-full max-w-7xl p-8 bg-white rounded-2xl shadow-lg space-y-10 pb-20 sm:p-10 sm:rounded-3xl sm:shadow-xl relative">
-
                 <div class="absolute top-4 right-6 z-auto">
                     <button @click="logout"
                         class="text-white text-lg bg-red-500 p-2 rounded-full hover:bg-red-600 transition relative group"
                         aria-label="Se déconnecter">
                         <font-awesome-icon :icon="['fas', 'right-from-bracket']" />
-
-                        <span class="absolute -top-9 right-1/2 translate-x-1/2 scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100
-             transition bg-black text-white text-xs px-2 py-1 rounded shadow z-50">
+                        <span
+                            class="absolute -top-9 right-1/2 translate-x-1/2 scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition bg-black text-white text-xs px-2 py-1 rounded shadow z-50">
                             Se déconnecter
                         </span>
                     </button>
@@ -29,87 +27,103 @@
                         Date(user.updatedAt).toLocaleDateString() }}</p>
                 </div>
 
-                <section>
-                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Modifier le nom d'utilisateur</h2>
-                    <form @submit.prevent="updateLogin" class="space-y-3">
-                        <input v-model="newLogin" type="text" placeholder="Nouveau login"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 transition duration-300" />
-                        <p v-for="(msg, i) in loginErrors" :key="i" class="text-red-500 text-sm mt-1">{{ msg }}</p>
-                        <button type="submit" class="w-full bg-blue-400 text-white font-semibold py-3 rounded-xl
-         shadow-md hover:bg-blue-500 active:scale-95 transition-transform duration-150
-         lg:py-2 lg:text-sm cursor-pointer">
-                            Enregistrer
-                        </button>
-                        <p v-if="loginMessage" class="text-center text-sm mt-1"
-                            :class="{ 'text-green-600': loginSuccess, 'text-red-600': !loginSuccess }">
-                            {{ loginMessage }}
-                        </p>
-                    </form>
-                </section>
-
-                <section>
-                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Changer le mot de passe</h2>
-                    <form @submit.prevent="changePassword" class="space-y-3 relative">
-                        <div class="relative">
-                            <input :type="showOldPassword ? 'text' : 'password'" v-model="oldPassword"
-                                autocomplete="current-password" placeholder="Ancien mot de passe"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-green-200 transition duration-300" />
-                            <button type="button" @click="showOldPassword = !showOldPassword"
-                                class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 cursor-pointer"
-                                :aria-label="showOldPassword ? 'Masquer mot de passe' : 'Afficher mot de passe'">
-                                <font-awesome-icon :icon="['fas', showOldPassword ? 'eye-slash' : 'eye']" />
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <section>
+                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Modifier le nom d'utilisateur</h2>
+                        <form @submit.prevent="updateLogin" class="space-y-3">
+                            <input v-model="newLogin" type="text" placeholder="Nouveau login"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 transition duration-300" />
+                            <p v-for="(msg, i) in loginErrors" :key="i" class="text-red-500 text-sm mt-1">{{ msg }}</p>
+                            <button type="submit"
+                                class="w-full max-w-md bg-blue-400 text-white font-semibold py-3 rounded-xl shadow-md hover:bg-blue-500 active:scale-95 transition-transform duration-150 lg:py-2 lg:text-sm cursor-pointer">
+                                Enregistrer
                             </button>
-                        </div>
+                            <p v-if="loginMessage" class="text-center text-sm mt-1"
+                                :class="{ 'text-green-600': loginSuccess, 'text-red-600': !loginSuccess }">
+                                {{ loginMessage }}
+                            </p>
+                        </form>
+                    </section>
 
-                        <div class="relative">
-                            <input :type="showNewPassword ? 'text' : 'password'" v-model="newPassword"
-                                autocomplete="new-password" placeholder="Nouveau mot de passe"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-green-200 transition duration-300" />
-                            <button type="button" @click="showNewPassword = !showNewPassword"
-                                class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 cursor-pointer"
-                                :aria-label="showNewPassword ? 'Masquer mot de passe' : 'Afficher mot de passe'">
-                                <font-awesome-icon :icon="['fas', showNewPassword ? 'eye-slash' : 'eye']" />
-                            </button>
-                        </div>
+                    <section>
+                        <h2 class="text-xl font-semibold mb-3 text-gray-700">Changer le mot de passe</h2>
+                        <form @submit.prevent="changePassword" class="space-y-3 relative">
+                            <div class="relative">
+                                <input :type="showOldPassword ? 'text' : 'password'" v-model="oldPassword"
+                                    autocomplete="current-password" placeholder="Ancien mot de passe"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-green-200 transition duration-300" />
+                                <button type="button" @click="showOldPassword = !showOldPassword"
+                                    class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                    :aria-label="showOldPassword ? 'Masquer mot de passe' : 'Afficher mot de passe'">
+                                    <font-awesome-icon :icon="['fas', showOldPassword ? 'eye-slash' : 'eye']" />
+                                </button>
+                            </div>
 
-                        <div class="relative">
-                            <input :type="showConfirmPassword ? 'text' : 'password'" v-model="confirmPassword"
-                                autocomplete="new-password" placeholder="Confirmer le nouveau mot de passe"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-green-200 transition duration-300" />
-                            <button type="button" @click="showConfirmPassword = !showConfirmPassword"
-                                class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 cursor-pointer"
-                                :aria-label="showConfirmPassword ? 'Masquer mot de passe' : 'Afficher mot de passe'">
-                                <font-awesome-icon :icon="['fas', showConfirmPassword ? 'eye-slash' : 'eye']" />
+                            <div class="relative">
+                                <input :type="showNewPassword ? 'text' : 'password'" v-model="newPassword"
+                                    autocomplete="new-password" placeholder="Nouveau mot de passe"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-green-200 transition duration-300" />
+                                <button type="button" @click="showNewPassword = !showNewPassword"
+                                    class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                    :aria-label="showNewPassword ? 'Masquer mot de passe' : 'Afficher mot de passe'">
+                                    <font-awesome-icon :icon="['fas', showNewPassword ? 'eye-slash' : 'eye']" />
+                                </button>
+                            </div>
+
+                            <div class="relative">
+                                <input :type="showConfirmPassword ? 'text' : 'password'" v-model="confirmPassword"
+                                    autocomplete="new-password" placeholder="Confirmer le nouveau mot de passe"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-green-200 transition duration-300" />
+                                <button type="button" @click="showConfirmPassword = !showConfirmPassword"
+                                    class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                    :aria-label="showConfirmPassword ? 'Masquer mot de passe' : 'Afficher mot de passe'">
+                                    <font-awesome-icon :icon="['fas', showConfirmPassword ? 'eye-slash' : 'eye']" />
+                                </button>
+                            </div>
+                            <p v-for="(msg, i) in passwordErrors" :key="i" class="text-red-500 text-sm mt-1">{{ msg }}
+                            </p>
+                            <button type="submit"
+                                class="w-full max-w-md bg-green-400 text-white font-semibold py-3 rounded-xl shadow-md hover:bg-green-500 active:scale-95 transition-transform duration-150 lg:py-2 lg:text-sm cursor-pointer">
+                                Changer
                             </button>
-                        </div>
-                        <p v-for="(msg, i) in passwordErrors" :key="i" class="text-red-500 text-sm mt-1">{{ msg }}
-                        </p>
-                        <button type="submit" class="w-full bg-green-400 text-white font-semibold py-3 rounded-xl
-         shadow-md hover:bg-green-500 active:scale-95 transition-transform duration-150
-         lg:py-2 lg:text-sm cursor-pointer">
-                            Changer
-                        </button>
-                        <p v-if="passwordMessage" class="text-center text-sm mt-1"
-                            :class="{ 'text-green-600': passwordSuccess, 'text-red-600': !passwordSuccess }">
-                            {{ passwordMessage }}
-                        </p>
-                    </form>
-                </section>
+                            <p v-if="passwordMessage" class="text-center text-sm mt-1"
+                                :class="{ 'text-green-600': passwordSuccess, 'text-red-600': !passwordSuccess }">
+                                {{ passwordMessage }}
+                            </p>
+                        </form>
+                    </section>
+                </div>
 
                 <section>
                     <h2 class="text-xl font-semibold mb-3 text-red-500">Supprimer le compte</h2>
-                    <p class="text-sm text-gray-500 mb-4 text-center">
+                    <p class="text-sm text-gray-500 mb-4 text-center md:text-left">
                         Cette action est irréversible.
-                    </p>
-                    <button @click="confirmDelete" class="w-full bg-red-400 text-white font-semibold py-3 rounded-xl
-         shadow-md hover:bg-red-500 active:scale-95 transition-transform duration-150
-         lg:py-2 lg:text-sm cursor-pointer">
+                    </p>        
+
+                    <button @click="confirmDelete"
+                        class="w-full max-w-md bg-red-400 text-white font-semibold py-3 rounded-xl shadow-md hover:bg-red-500 active:scale-95 transition-transform duration-150 lg:py-2 lg:text-sm cursor-pointer">
                         Supprimer mon compte
                     </button>
                 </section>
 
                 <p v-if="generalError" class="text-red-500 text-center text-sm">{{ generalError }}</p>
+
+                <section class="mt-6 space-y-3">
+                    <h2 class="text-xl font-semibold text-gray-700">Mes activités</h2>
+                    <RouterLink to="/activities/favorites"
+                        class="flex items-center gap-2 text-blue-600 hover:underline">
+                        <font-awesome-icon :icon="['fas', 'heart']" style="color:#A3BFFA" />
+                        <span>Activités favorites</span>
+                    </RouterLink>
+
+                    <RouterLink to="/activities/saved"
+                        class="flex items-center gap-2 text-blue-600 hover:underline mt-2">
+                        <font-awesome-icon :icon="['fas', 'clock']" style="color:#A3BFFA" />
+                        <span>Enregistrer pour plus tard</span>
+                    </RouterLink>
+                </section>
             </div>
+
             <SuccessModal :visible="showSuccessModal" :message="modalMessage" @close="showSuccessModal = false" />
             <ConfirmDeleteModal :visible="showConfirmModal"
                 message="Es-tu sûr de vouloir supprimer ton compte ? Cette action est irréversible."
@@ -117,6 +131,7 @@
         </main>
     </AppLayout>
 </template>
+
 
 
 <script setup lang="ts">

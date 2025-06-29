@@ -16,12 +16,6 @@
                         <p v-if="errors.content" class="text-red-600 text-sm mt-1">{{ errors.content }}</p>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Lien vidéo (facultatif)</label>
-                        <input v-model="form.link" type="text" class="form-input" placeholder="https://..." />
-                        <p v-if="errors.link" class="text-red-600 text-sm mt-1">{{ errors.link }}</p>
-                    </div>
-
                     <div class="flex justify-end gap-4 pt-4">
                         <RouterLink to="/admin/pages" class="btn-secondary">Annuler</RouterLink>
                         <button type="submit" class="btn-primary">Créer</button>
@@ -44,7 +38,6 @@ import SuccessModal from '../components/SuccessModal.vue'
 import pageService from '../services/PageService'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { isValidUrl } from '../helper/FunctionUtils'
 
 
 
@@ -55,13 +48,11 @@ const globalError = ref('')
 const errors = ref({
     title: '',
     content: '',
-    link: ''
 })
 
 const form = ref<CreatePage>({
     title: '',
     content: '',
-    link: '',
 })
 
 
@@ -82,20 +73,11 @@ const handleSubmit = async () => {
         valid = false
     }
 
-    if (form.value.link.trim() && !isValidUrl(form.value.link)) {
-        errors.value.link = 'Le lien vidéo doit être une URL valide.'
-        valid = false
-    }
-
     if (!valid) return
 
     const payload: Partial<CreatePage> = {
         title: form.value.title.trim(),
         content: form.value.content.trim(),
-    }
-
-    if (form.value.link && form.value.link.trim() !== '') {
-        payload.link = form.value.link.trim()
     }
 
     try {
