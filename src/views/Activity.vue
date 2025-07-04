@@ -7,7 +7,9 @@
                 <div class="p-6">
                     <h1 class="text-3xl font-semibold mb-2">{{ activity.title }}</h1>
                     <p class="text-gray-600 mb-4">Type : {{ activity.type }} | Catégorie : {{ activity.category }}</p>
+                    <p class="text-gray-500 mb-4">Durée : {{ activity.durationMin }} minutes</p>
 
+                    <p class="text-gray-700 mb-4">{{ activity.description }}</p>
                     <div class="flex gap-4 mb-6">
                         <button @click="toggleFavorite" :class="[
                             'px-4 py-2 rounded-md font-medium transition',

@@ -95,7 +95,7 @@ import ErrorModal from '@/components/ErrorModal.vue'
 import SuccessModal from '@/components/SuccessModal.vue'
 import type { CategoryResponse, CreateCategory, UpdateCategory } from '../models/Category.ts'
 import { useContextMenu } from '../components/UseContextMenu.ts'
-import categoryService from '../services/CategoryService.ts'
+import categoryService from '../services/categoryService.ts'
 const { actionMenuId, menuRefs, menuPosition, openActionMenu, closeMenu } = useContextMenu()
 
 

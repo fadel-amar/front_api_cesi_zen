@@ -21,7 +21,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import AppLayout from '../components/layout/AppLayout.vue'
-import pageService from '../services/PageService'
+import pageService from '../services/pageService'
 import type { FullPageResponse } from '../models/Page'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'

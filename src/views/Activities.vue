@@ -37,7 +37,7 @@ import { ref, watch, onMounted } from 'vue'
 import AppLayout from '../components/layout/AppLayout.vue'
 import type { ActivityResponse } from '../models/Activity'
 import activityService from '../services/ActivityService'
-import categoryService from '../services/CategoryService';
+import categoryService from '../services/categoryService';
 import type { CategoryResponse } from '../models/Category';
 import { useRoute } from 'vue-router'
 

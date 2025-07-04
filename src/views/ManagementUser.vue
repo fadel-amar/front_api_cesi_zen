@@ -30,7 +30,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in users" :key="user.id" class="border-t border-gray-100 hover:bg-blue-50">
+            <tr v-for="user in users" :key="user.id" class="border-t border-gray-100 hover:bg-blue-50 pointer-cursor">
               <td class="px-4 py-3 hidden md:table-cell">{{ user.id }}</td>
               <td class="px-4 py-3">{{ user.email }}</td>
               <td class="px-4 py-3">{{ user.login }}</td>
@@ -49,7 +49,8 @@
           </tbody>
         </table>
         <div class="flex flex-col gap-4 sm:hidden">
-          <div v-for="user in users" :key="user.id" class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+          <div v-for="user in users" :key="user.id"
+            class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm pointer-cursor">
             <div class="flex justify-between items-start">
               <div>
                 <p class="font-semibold text-gray-800">{{ user.email }}</p>
@@ -106,7 +107,7 @@ import AppLayout from '@/components/layout/AppLayout.vue'
 import ConfirmModal from '@/components/ConfirmDeleteModal.vue'
 import EditUserModal from '@/components/Management/EditUserModal.vue'
 import ErrorModal from '@/components/ErrorModal.vue'
-import * as userService from '../services/UserService'
+import * as userService from '../services/userService.ts'
 import type { UserResponse, ListUserResponse } from '../models/User.ts'
 import { useContextMenu } from '../components/UseContextMenu.ts'
 
@@ -118,6 +119,7 @@ const userIdToDelete = ref<number | null>(null)
 const shouldShowEditModal = ref(false)
 const selectedUser = ref<UserResponse | null>(null)
 const showErrorModal = ref(false)
+let apiErros: string = '';
 
 
 const { actionMenuId, menuRefs, menuPosition, openActionMenu, closeMenu } = useContextMenu()
@@ -181,14 +183,39 @@ const showEditModal = (user: UserResponse) => {
 const confirmEdit = async (userData: Partial<UserResponse>) => {
   if (selectedUser.value) {
     try {
-      await userService.updateUser(selectedUser.value.id, userData)
+      const original = selectedUser.value
+      const modifications: Partial<UserResponse> = {}
+
+      for (const key in userData) {
+        const newValue = userData[key as keyof UserResponse]
+        const oldValue = original[key as keyof UserResponse]
+
+        if (newValue !== undefined && newValue !== oldValue) {
+          (modifications as any)[key] = newValue
+        }
+      }
+
+      if (Object.keys(modifications).length === 0) {
+        shouldShowEditModal.value = false
+        selectedUser.value = null
+        return
+      }
+
+      await userService.updateUser(original.id, modifications)
       fetchUsers()
-    } catch {
+    } catch (errors: any) {
       showErrorModal.value = true
+      if (errors && errors.response && errors.response.data && errors.response.data.errors) {
+        apiErros = errors.response.data.errors.Email || errors.response.data.errors.Login || 'Erreur inconnue.'
+      } else if (typeof errors === 'string') {
+        apiErros = errors
+      } else if (errors instanceof Error) {
+        apiErros = errors.message
+      } else {
+        apiErros = 'Une erreur inconnue est survenue.'
+      }
     }
   }
-  shouldShowEditModal.value = false
-  selectedUser.value = null
 }
 
 const cancelEdit = () => {

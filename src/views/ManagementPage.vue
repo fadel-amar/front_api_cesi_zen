@@ -81,7 +81,7 @@ import AppLayout from '@/components/layout/AppLayout.vue'
 import ConfirmModal from '@/components/ConfirmDeleteModal.vue'
 import SuccessModal from '@/components/SuccessModal.vue'
 import ErrorModal from '@/components/ErrorModal.vue'
-import pageService from '../services/PageService'
+import pageService from '../services/pageService'
 import type { PageResponse } from '../models/Page'
 import { useContextMenu } from '../components/UseContextMenu'
 

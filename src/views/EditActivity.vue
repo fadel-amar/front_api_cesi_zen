@@ -27,6 +27,7 @@
                         </div>
                         <input type="file" accept="image/*" @change="handleFileChange($event, 'imagePresentation')"
                             class="form-input" />
+                        <p v-if="imageError" class="text-sm text-red-600 mt-1">{{ imageError }}</p>
                     </div>
 
                     <div>
@@ -40,6 +41,7 @@
                         </div>
                         <input type="file" accept="video/*" @change="handleFileChange($event, 'url')"
                             class="form-input" />
+                        <p v-if="videoError" class="text-sm text-red-600 mt-1">{{ videoError }}</p>
                     </div>
 
                     <select v-model.number="form.typeActivitty" class="form-input">
@@ -82,12 +84,14 @@ import type { UpdateActivity } from '../models/Activity'
 import type { CategoryResponse } from '../models/Category'
 import activityService from '../services/ActivityService'
 import SuccessModal from '../components/SuccessModal.vue'
-import categoryService from '../services/CategoryService'
+import categoryService from '../services/categoryService'
 const URL_MEDIA: string = import.meta.env.VITE_URL_MEDIA;
 
 const route = useRoute()
 const router = useRouter()
 const activityId = Number(route.params.id)
+const imageError = ref('');
+const videoError = ref('');
 
 const form = ref<UpdateActivity>({
     title: '',
@@ -148,23 +152,45 @@ const fetchData = async () => {
 }
 
 const handleFileChange = (event: Event, field: 'imagePresentation' | 'url') => {
-    const input = event.target as HTMLInputElement
-    if (input.files && input.files.length > 0) {
-        form.value[field] = input.files[0]
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
 
-        const reader = new FileReader()
-        reader.onload = (e) => {
-            if (field === 'imagePresentation') {
-                currentImage.value = e.target?.result as string
-            } else {
-                currentVideo.value = e.target?.result as string
-            }
-        }
-        reader.readAsDataURL(input.files[0])
-    } else {
-        form.value[field] = null
+    if (!file) {
+        form.value[field] = null;
+        return;
     }
-}
+
+    // Validation des types MIME
+    const isImage = ['image/jpeg', 'image/png', 'image/jpg'].includes(file.type);
+    const isVideo = ['video/mp4', 'audio/mp3'].includes(file.type);
+
+    if (field === 'imagePresentation' && !isImage) {
+        imageError.value = 'Seuls les fichiers JPEG, JPG ou PNG sont autorisés pour l’image.';
+        form.value.imagePresentation = null;
+        return;
+    } else if (field === 'url' && !isVideo) {
+        videoError.value = 'Seuls les fichiers MP4 ou MP3 sont autorisés pour le contenu.';
+        form.value.url = null;
+        return;
+    }
+
+    // Reset erreurs
+    if (field === 'imagePresentation') imageError.value = '';
+    if (field === 'url') videoError.value = '';
+
+    form.value[field] = file;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        if (field === 'imagePresentation') {
+            currentImage.value = e.target?.result as string;
+        } else {
+            currentVideo.value = e.target?.result as string;
+        }
+    };
+    reader.readAsDataURL(file);
+};
+
 
 const handleSubmit = async () => {
     const payload = new FormData()

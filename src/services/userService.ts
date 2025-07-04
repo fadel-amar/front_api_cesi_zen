@@ -1,8 +1,5 @@
 import axios from 'axios';
-import type {
-  FullUserResponse,
-  ListUserResponse,
-} from '../models/User';
+import type { FullUserResponse, ListUserResponse } from '../models/User';
 import { ApiError } from '../helper/ApiError';
 import api from './ApiService';
 
@@ -56,6 +53,7 @@ export async function updateUser(
     const response = await api.put<FullUserResponse>(`/users/${id}`, userData);
     return response.data;
   } catch (error: unknown) {
+    console.log('User updated:', error);
     if (axios.isAxiosError(error) && error.response) {
       throw new Error(
         `Erreur API: ${error.response.status} - ${error.response.statusText}`

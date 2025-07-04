@@ -97,6 +97,11 @@ function validate() {
     clearErrors();
 
     if (!login.value.trim()) loginErrors.value.push("Le login est obligatoire");
+    else if (login.value.length < 3 || login.value.length > 25) {
+        loginErrors.value.push("Le login doit contenir entre 3 et 25 caractères");
+    } else if (!/^[a-zA-Z0-9]+$/.test(login.value)) {
+        loginErrors.value.push("Le login ne doit contenir que des lettres et des chiffres");
+    }
 
     if (!email.value.trim()) {
         emailErrors.value.push("L'email est obligatoire");
@@ -138,7 +143,8 @@ async function handleRegister() {
             if (apiErrors.Email) emailErrors.value.push(...apiErrors.Email);
             if (apiErrors.Password) passwordErrors.value.push(...apiErrors.Password);
         } else {
-            error.value = e.message || "Erreur lors de l'inscription";
+            console.error("Erreur lors de l'inscription:", e);
+            error.value = e.data?.reponse?.message || "Erreur lors de l'inscription";
         }
     }
 }

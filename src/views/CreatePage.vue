@@ -35,7 +35,7 @@ import { useRouter } from 'vue-router'
 import AppLayout from '@/components/layout/AppLayout.vue'
 import type { CreatePage } from '../models/Page'
 import SuccessModal from '../components/SuccessModal.vue'
-import pageService from '../services/PageService'
+import pageService from '../services/pageService'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 

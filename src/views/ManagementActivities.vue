@@ -38,7 +38,7 @@
               <td class="px-4 py-3 text-right">
                 <div class="inline-block relative">
                   <button @click.stop="openActionMenu(act.id, $event)"
-                    class="text-gray-600 hover:text-gray-900 text-lg">
+                    class="text-gray-600 hover:text-gray-900 text-lg cursor-pointer">
                     ⋮
                   </button>
                 </div>

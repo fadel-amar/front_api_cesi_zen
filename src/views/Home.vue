@@ -48,12 +48,12 @@
 <script setup lang="ts">
 import AppLayout from '../components/layout/AppLayout.vue'
 import { onMounted, ref } from 'vue'
-import pageService from '../services/PageService'
+import pageService from '../services/pageService'
 import type { PageResponse } from '../models/Page'
 import type { ActivityResponse } from '../models/Activity'
 import activityService from '../services/ActivityService'
 import type { CategoryResponse } from '../models/Category'
-import categoryService from '../services/CategoryService'
+import categoryService from '../services/categoryService'
 
 const pages = ref<PageResponse[]>([])
 const activities = ref<ActivityResponse[]>([])

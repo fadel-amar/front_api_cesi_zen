@@ -26,8 +26,7 @@
           <p v-if="errors.duration" class="text-red-500 text-xs mt-1">{{ errors.duration }}</p>
         </div>
         <div class="flex justify-center gap-4 mt-6">
-          <button type="button" @click="$emit('cancel')"
-            class="btn-secondary">
+          <button type="button" @click="$emit('cancel')" class="btn-secondary">
             Annuler
           </button>
           <button type="submit" class="btn-primary">
@@ -42,6 +41,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import type { CreateCategory } from '../../models/Category.ts'
+const durationPattern = /^([1-9]\d*) à ([1-9]\d*) minutes$/;
 
 const props = defineProps<{
   visible: boolean
@@ -96,12 +96,21 @@ const handleSubmit = () => {
     hasErrors = true
   }
 
-  if (!formData.value.duration) {
-    errors.value.duration = 'La durée est requise'
-    hasErrors = true
-  } else if (formData.value.duration.length > 50) {
-    errors.value.duration = 'La durée doit avoir moins de 50 caractères'
-    hasErrors = true
+  if (formData.value.duration) {
+    const match = formData.value.duration.match(durationPattern);
+
+    if (!match) {
+      errors.value.duration = 'Le format doit être : "2 à 6 minutes" sans zéros initiaux';
+      hasErrors = true;
+    } else {
+      const start = parseInt(match[1], 10);
+      const end = parseInt(match[2], 10);
+
+      if (start >= end) {
+        errors.value.duration = 'Le premier nombre doit être inférieur au deuxième';
+        hasErrors = true;
+      }
+    }
   }
 
   if (hasErrors) return

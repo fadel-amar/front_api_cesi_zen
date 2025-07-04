@@ -70,6 +70,8 @@ const errors = ref({
   status: ''
 })
 
+const durationPattern = /^([1-9]\d*) à ([1-9]\d*) minutes$/;
+
 watch(
   () => props.category,
   (newCategory) => {
@@ -107,11 +109,23 @@ const handleSubmit = () => {
   errors.value = { name: '', emoji: '', duration: '', status: '' }
   let hasErrors = false
 
-  if (formData.value.name && formData.value.name.length > 50) {
-    errors.value.name = 'Le nom doit avoir moins de 50 caractères'
-    hasErrors = true
-  }
+  if (formData.value.duration) {
+    const match = formData.value.duration.match(durationPattern);
 
+    if (!match) {
+      errors.value.duration = 'Le format doit être : "2 à 6 minutes" sans zéros initiaux';
+      hasErrors = true;
+    } else {
+      const start = parseInt(match[1], 10);
+      const end = parseInt(match[2], 10);
+
+      if (start >= end) {
+        errors.value.duration = 'Le premier nombre doit être inférieur au deuxième';
+        hasErrors = true;
+      }
+    }
+  }
+  
   if (formData.value.emoji && !formData.value.emoji.match(/[\u{1F300}-\u{1F9FF}]/u)) {
     errors.value.emoji = 'Emoji invalide'
     hasErrors = true

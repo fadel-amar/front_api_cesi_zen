@@ -140,7 +140,7 @@ import SuccessModal from '../components/SuccessModal.vue'
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue'
 import router from '../router'
 import * as authService from '../services/AuthService'
-import * as userService from '../services/UserService'
+import * as userService from '../services/userService'
 import AppLayout from '../components/layout/AppLayout.vue'
 
 

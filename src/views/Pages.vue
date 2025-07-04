@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import AppLayout from '../components/layout/AppLayout.vue'
-import pageService from '../services/PageService'
+import pageService from '../services/pageService'
 import type { PageResponse } from '../models/Page'
 
 const pages = ref<PageResponse[]>([])

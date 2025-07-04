@@ -38,7 +38,7 @@
           <p v-if="errors.ImagePresentation" class="text-red-500 text-xs mt-1">{{ errors.ImagePresentation }}</p>
         </div>
         <div>
-          <label for="url" class="block text-sm font-medium text-gray-700">Contenu (URL)</label>
+          <label for="url" class="block text-sm font-medium text-gray-700">Contenu</label>
           <input id="url" type="file"
             class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
             :class="{ 'border-red-500': errors.Url }" @change="handleFileChange($event, 'Url')"
@@ -84,7 +84,7 @@
 import { ref, onMounted } from 'vue'
 import type { CategoryResponse } from '../../models/Category';
 import activityService from '../../services/ActivityService';
-import categoryService from '../../services/CategoryService';
+import categoryService from '../../services/categoryService';
 
 const props = defineProps<{
   visible: boolean
@@ -145,11 +145,35 @@ const fetchActivityTypes = async () => {
 
 const handleFileChange = (event: Event, field: 'ImagePresentation' | 'Url') => {
   const input = event.target as HTMLInputElement
-  if (input.files && input.files.length > 0) {
-    formData.value[field] = input.files[0]
-  } else {
+  if (!input.files || input.files.length === 0) {
     formData.value[field] = null
+    errors.value[field] = `Le fichier est requis.`
+    return
   }
+
+  const file = input.files[0]
+  const imageTypes = ['image/jpeg', 'image/png', 'image/jpg']
+  const videoTypes = ['video/mp4', 'audio/mp3']
+
+  if (field === 'ImagePresentation') {
+    if (!imageTypes.includes(file.type)) {
+      formData.value[field] = null
+      errors.value[field] = 'Seuls les fichiers JPG, JPEG ou PNG sont autorisés pour l’image.'
+      return
+    }
+    errors.value.ImagePresentation = ''
+  }
+
+  if (field === 'Url') {
+    if (!videoTypes.includes(file.type)) {
+      formData.value[field] = null
+      errors.value[field] = 'Seuls les fichiers MP4 ou MP3 sont autorisés pour le contenu.'
+      return
+    }
+    errors.value.Url = ''
+  }
+
+  formData.value[field] = file
 }
 
 const handleSubmit = () => {
@@ -191,7 +215,7 @@ const handleSubmit = () => {
   }
 
   if (!formData.value.Url) {
-    errors.value.Url = 'Le contenu (URL) est requis.'
+    errors.value.Url = 'Le contenu est requis.'
     hasErrors = true
   }
 
